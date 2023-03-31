@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\service;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\service;
 use Illuminate\Support\Facades\File;
 
 class featurescontroller extends Controller
@@ -37,7 +38,7 @@ class featurescontroller extends Controller
             'title' => 'required',
             'icon' => 'required',
             'content' => 'required',
-
+            'work_id'=>'numeric'
         ]);
         // Upload Images
                 $icon_name = null;
@@ -84,9 +85,10 @@ class featurescontroller extends Controller
          // Validate Data
          $request->validate([
             'title' => 'required',
-            'icon' => 'required',
-            'content' => 'required',
-        ]);
+         'icon' => 'required',
+         'content' => 'required',
+         'work_id'=>'numeric'
+     ]);
         $feature = service::findOrFail($id);
 
           // Upload Images
@@ -99,11 +101,10 @@ class featurescontroller extends Controller
 
           // Store To Database
           $feature->update([
-              'title' => $request->title,
               'icon' => $icon_name,
+              'title' => $request->title,
               'content' => $request->content,
               'work_id' => $request->work_id,
-
           ]);
 
           // Redirect
@@ -113,7 +114,7 @@ class featurescontroller extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy( $id)
+    public function destroy($id)
     {
         $feature = service::findOrFail($id);
 

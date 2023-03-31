@@ -10,11 +10,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class work extends Model
 {
     use HasFactory,SoftDeletes;
-    //protected $gurded=[];
-     protected $fillable=['title','image','content'];
+    protected $fillable=['title','image','content'];
 
-    public function work()
+    public function service()
     {
-        return $this->belongsTo(service::class);
+        return $this->hasMany(service::class)->withDefault();
     }
 }

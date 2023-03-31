@@ -1,10 +1,6 @@
 @extends('admin.master')
 
-@php
-    $name = 'name_'.app()->currentLocale();
-@endphp
-
-@section('title', 'works | ' . env('APP_NAME'))
+@section('title', 'features | ' . env('APP_NAME'))
 
 @section('content')
 
@@ -18,38 +14,33 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>id</th>
-                <th>title</th>
-                <th>icon</th>
-                <th>content</th>
-                <th>Work</th>
-
+                <th>Id</th>
+                <th>Title</th>
+                <th>Icon</th>
+                <th>Content</th>
+                <th>Work_id</th>
             </tr>
         </thead>
+
         <tbody>
             <tr>
                 @foreach ($features as $feature)
                 <td>{{ $feature->id}}</td>
-                    <td>{{ $feature->title}}</td>
-
-                    <td><img width="80" src="{{ asset('uploads/features/'.$feature->icon) }}" alt=""></td>
-                    <td>
-                        {{ $feature->content }}
-                    </td>
-                    <td>
-                        {{ $feature->work_id }}
-                    </td>
-                    <td>
-                        <a class="btn btn-primary" href="{{ route('admin.works.edit', $feature->id) }}"><i class="fas fa-edit"></i></a>
-                        <form class="d-inline" action="{{ route('admin.works.destroy', $feature->id) }}" method="POST">
+                <td>{{ $feature->title}}</td>
+                <td><img width="80" src="{{ asset('uploads/features/'.$feature->icon) }}" alt=""></td>
+                <td>{{ $feature->content}}</td>
+                <td>{{ $feature->work_id }}</td>
+                <td>
+                        <a class="btn btn-primary" href="{{ route('admin.features.edit', $feature->id) }}"><i class="fas fa-edit"></i></a>
+                        <form class="d-inline" action="{{ route('admin.features.destroy', $feature->id) }}" method="POST">
                             @csrf
                             @method('delete')
                         <button class="btn btn-danger" onclick="return confirm('Are you sure')"><i class="fas fa-trash"></i></button>
                         </form>
-                    </td>
+                </td>
                 </tr>
             @endforeach
         </tbody>
-    </table>
+    </table>
 
 @stop

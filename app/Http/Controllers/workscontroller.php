@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\work;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 
 class workscontroller extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         $works = work::orderByDesc('id')->paginate(10);
@@ -24,8 +23,7 @@ class workscontroller extends Controller
     public function create()
     {
         $works = work::all();
-        return view('admin.works.create');
-
+        return view('admin.works.create' , compact('works'));
     }
 
     /**
@@ -34,25 +32,27 @@ class workscontroller extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required',
-            'image' => 'required',
+            'title'   => 'required',
+            'image'   => 'required',
             'content' => 'required',
         ]);
         // Upload Images
-                $image_name = null;
+                $img_name = null;
                 if($request->hasFile('image')) {
                     $image = $request->file('image');
-                    $image_name = rand(). time().$image->getClientOriginalName();
-                    $image->move(public_path('uploads/works'), $image_name);
+                    $img_name = rand(). time().$image->getClientOriginalName();
+                    $image->move(public_path('uploads/works'), $img_name);
                 }
                   // Store To Database
         work::create([
-            'title' => $request->title,
-            'image' => $image_name,
-            'content' => $request->content,
-        ]);
+            'title'   =>  $request->title,
+            'image'   =>  $img_name,
+            'content' =>  $request->content,
+            ]);
+
          // Redirect
-         return redirect()->route('admin.works.index')->with('msg', 'works added successfully')->with('type', 'success');
+         return redirect()->route('admin.works.index')->with('msg', 'work added successfully')->with('type', 'success');
+
     }
 
     /**
@@ -72,6 +72,7 @@ class workscontroller extends Controller
         $works = work::all();
 
         return view('admin.works.edit', compact('work', 'works'));
+
     }
 
     /**
@@ -79,32 +80,33 @@ class workscontroller extends Controller
      */
     public function update(Request $request, string $id)
     {
-         // Validate Data
-         $request->validate([
-            'title' => 'required',
-            'image' => 'required',
+        // Validate Data
+        $request->validate([
+            'title'   => 'required',
+            'image'   => 'required',
             'content' => 'required',
-        ]);
+            ]);
+
         $work = work::findOrFail($id);
 
           // Upload Images
-          $image_name = $work->image;
+          $img_name = $work->image;
           if($request->hasFile('image')) {
               $image = $request->file('image');
-              $image_name = rand(). time().$image->getClientOriginalName();
-              $image->move(public_path('uploads/works'), $image_name);
+              $img_name = rand(). time().$image->getClientOriginalName();
+              $image->move(public_path('uploads/works'), $img_name);
           }
 
           // Store To Database
           $work->update([
-              'title' => $request->title,
-              'image' => $image_name,
-              'content' => $request->content,
-
-          ]);
+            'title'   =>  $request->title,
+            'image'   =>  $img_name,
+            'content' =>  $request->content,
+            ]);
 
           // Redirect
           return redirect()->route('admin.works.index')->with('msg', 'work updated successfully')->with('type', 'info');
+
     }
 
     /**
@@ -120,6 +122,7 @@ class workscontroller extends Controller
         $work->delete();
 
         return redirect()->route('admin.works.index')->with('msg', 'work deleted successfully')->with('type', 'danger');
+
     }
 
     public function trash()
